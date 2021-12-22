@@ -1,0 +1,33 @@
+version: '3.1'
+
+volumes:
+  nginxlog:
+
+
+networks:
+  gn-network:
+    driver: bridge
+
+
+services:
+  www:
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - NGINX_PUBLIC_HOST=$FQDN
+    volumes:
+      - ./nginx_http_only:/etc/nginx/templates
+      - nginxlog:/var/log/nginx
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - gn-network
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw

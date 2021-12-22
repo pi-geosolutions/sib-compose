@@ -5,7 +5,6 @@ volumes:
   pgdata:
   pglog:
   nginxlog:
-  apachelog:
 
 
 networks:
@@ -18,38 +17,29 @@ services:
     image: nginx
     ports:
       - 80:80
+      - 443:443
     environment:
-      # Only used for / redirect to default webapp
-      - NGINX_PUBLIC_HOST=localhost
-      #- NGINX_PUBLIC_HOST=apps.titellus.net
-      - NGINX_HOST=0.0.0.0
-      - NGINX_PORT=80
+      - NGINX_PUBLIC_HOST=$FQDN
     volumes:
       - ./nginx:/etc/nginx/templates
       - nginxlog:/var/log/nginx
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - geonetwork
+      - geoserver
     networks:
       - gn-network
+    restart: always
 
-#  www:
-#    image: httpd
-#    ports:
-#      - 81:80
-#    volumes:
-#      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
-#      - ./apache/gn-httpd.conf:/usr/local/apache2/conf/gn-httpd.conf
-#      - apachelog:/usr/local/apache2/logs
-#    depends_on:
-#      - geonetwork
-#    networks:
-#      - gn-network
-
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   database:
     image: postgis/postgis:11-2.5
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_USER: geonetwork
       POSTGRES_PASSWORD: geonetwork
@@ -70,18 +60,16 @@ services:
   geonetwork:
     image: pigeosolutions/sib-geonetwork:latest
     restart: always
-    ports:
-      - 8080:8080
     environment:
       DATA_DIR: /catalogue-data
       ENABLE_CAS: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
-      GEONETWORK_URL: "http://localhost/geonetwork"
+      GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
 
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
-        -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC
+        -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalogue-data/resources
         -Dgeonetwork.data.dir=/catalogue-data
         -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist
@@ -101,7 +89,6 @@ services:
       GEONETWORK_DB_PASSWORD: geonetwork
     volumes:
       - ./geonetwork_data:/catalogue-data
-      - ./geonetwork_webinf:/mnt/webinf
     depends_on:
       - elasticsearch
       - database
@@ -110,6 +97,9 @@ services:
 
   geoserver:
     image: pigeosolutions/geoserver:2.20.1-sib
+    environment:
+      GEOSERVER_CSRF_WHITELIST: ${FQDN}
+      PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
     volumes:
       - ./geoserver_datadir:/mnt/geoserver_datadir
       - ./geoserver_geodata:/mnt/geoserver_geodata
@@ -120,8 +110,6 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.9.2
-    ports:
-      - 9200:9200
     ulimits:
       memlock:
         soft: -1

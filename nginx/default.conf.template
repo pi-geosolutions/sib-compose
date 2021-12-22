@@ -1,29 +1,69 @@
 server {
-  listen ${NGINX_PORT};
-  server_name ${NGINX_HOST};
+    listen 80;
+    listen [::]:80;
 
-  access_log /var/log/nginx/gn-access.log;
-  error_log /var/log/nginx/gn-error.log;
+    server_name ${NGINX_PUBLIC_HOST};
 
-  location / {
-    server_name_in_redirect off;
-    return 301 $scheme://${NGINX_PUBLIC_HOST}/geonetwork;
-  }
+    access_log /var/log/nginx/gn-access.log;
+    error_log /var/log/nginx/gn-error.log;
 
-  location /geonetwork {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_redirect off;
-    proxy_pass http://geonetwork:8080/geonetwork;
-  }
-  location /geoserver {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_redirect off;
-    proxy_pass http://geoserver:8080/geoserver;
-  }
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://${NGINX_PUBLIC_HOST}$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name ${NGINX_PUBLIC_HOST};
+
+    ssl_certificate /etc/nginx/ssl/live/${NGINX_PUBLIC_HOST}/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/${NGINX_PUBLIC_HOST}/privkey.pem;
+
+    location / {
+      server_name_in_redirect off;
+      return 302 $scheme://${NGINX_PUBLIC_HOST}/geonetwork;
+    }
+
+    location /geonetwork {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_redirect off;
+      proxy_pass http://geonetwork:8080/geonetwork;
+    }
+    location /geoserver {
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto https;
+      proxy_redirect off;
+      proxy_pass http://geoserver:8080/geoserver;
+
+
+      # CORS, see https://distinctplace.com/2017/04/17/nginx-access-control-allow-origin-cors/
+      # Simple requests
+      if ($request_method ~* "(GET|POST|HEAD)") {
+        add_header "Access-Control-Allow-Origin"  *;
+      }
+
+      # Preflighted requests
+      if ($request_method = OPTIONS ) {
+
+        # Tell client that this pre-flight info is valid for 20 minutes
+        #
+        add_header 'Access-Control-Max-Age' 1200;
+        add_header "Access-Control-Allow-Origin"  *;
+        add_header "Access-Control-Allow-Methods" "GET, POST, OPTIONS, HEAD";
+        add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
+        return 200;
+      }
+    }
 }
 
 server {
