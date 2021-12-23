@@ -14,6 +14,7 @@ To start it from scratch, you need a temporary certificate, so that nginx accept
 source .env
 # Create some folders for volumes
 mkdir -p {certbot,geonetwork_data}
+sudo chown -R 999:999 geonetwork_data
 
 # Start a temporary composition to create the first certificate
 docker-compose -f docker-compose-init-certs.yml up -d
