@@ -17,27 +17,18 @@ services:
     image: nginx
     ports:
       - 80:80
-      - 443:443
     environment:
       - NGINX_PUBLIC_HOST=$FQDN
     volumes:
-      - ./nginx:/etc/nginx/templates
+      - ./nginx_local:/etc/nginx/templates
       - ./nginx_html:/usr/share/nginx/html
       - nginxlog:/var/log/nginx
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - geonetwork
       - geoserver
     networks:
       - gn-network
     restart: always
-
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   database:
     image: postgis/postgis:11-2.5
@@ -63,7 +54,7 @@ services:
     restart: always
     environment:
       DATA_DIR: /catalogue-data
-      ENABLE_CAS: "yes"
+      ENABLE_CAS: "no"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
 
@@ -88,6 +79,7 @@ services:
       GEONETWORK_DB_NAME: geonetwork
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
+      NF_MENU_URL: "http://localhost/NFpage.html"
     volumes:
       - ./geonetwork_data:/catalogue-data
     depends_on:
