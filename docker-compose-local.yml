@@ -53,8 +53,8 @@ services:
     image: pigeosolutions/sib-geonetwork:latest
     restart: always
     environment:
-      DATA_DIR: /catalogue-data
-      ENABLE_CAS: "yes"
+      DATA_DIR: /catalog
+      ENABLE_CAS: "no"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
 
@@ -62,10 +62,11 @@ services:
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
-        -Dgeonetwork.resources.dir=/catalogue-data/data/resources
-        -Dgeonetwork.data.dir=/catalogue-data/data/metadata_data
-        -Dgeonetwork.config.dir=/catalogue-data/config
-        -Dgeonetwork.backup.dir=/catalogue-data/data/backup
+        -Dgeonetwork.resources.dir=/catalog/data/resources
+        -Dgeonetwork.data.dir=/catalog/data/metadata_data
+        -Dgeonetwork.config.dir=/catalog/config
+        -Dgeonetwork.codeList.dir=/catalog/config/codelist
+        -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
       ES_HOST: elasticsearch
@@ -82,7 +83,7 @@ services:
       GEONETWORK_DB_PASSWORD: geonetwork
       NF_MENU_URL: "http://localhost/NFpage.html"
     volumes:
-      - ./volumes/geonetwork_data:/catalogue-data
+      - ./volumes/geonetwork_data:/catalog
     depends_on:
       - elasticsearch
       - database

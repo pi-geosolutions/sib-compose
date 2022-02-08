@@ -74,7 +74,8 @@ services:
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalog/data/resources
         -Dgeonetwork.data.dir=/catalog/data/metadata_data
-        -Dgeonetwork.config.dir=/catalogue-data/config
+        -Dgeonetwork.config.dir=/catalog/config
+        -Dgeonetwork.codeList.dir=/catalog/config/codelist
         -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
