@@ -59,13 +59,14 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:latest
+    image: pigeosolutions/sib-geonetwork:4.0.6-20220208-1539-4fdc9b1
     restart: always
     environment:
       DATA_DIR: /catalog
       ENABLE_CAS: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
+      NF_MENU_URL: "${HTTP_SCHEME}://${FQDN}/NFpage.html"
 
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
@@ -73,7 +74,7 @@ services:
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalog/data/resources
         -Dgeonetwork.data.dir=/catalog/data/metadata_data
-        -Dgeonetwork.codeList.dir=/catalog/config/codelist
+        -Dgeonetwork.config.dir=/catalogue-data/config
         -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
