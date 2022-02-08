@@ -62,7 +62,7 @@ services:
     image: pigeosolutions/sib-geonetwork:latest
     restart: always
     environment:
-      DATA_DIR: /catalogue-data
+      DATA_DIR: /catalog
       ENABLE_CAS: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
@@ -71,10 +71,10 @@ services:
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
-        -Dgeonetwork.resources.dir=/catalogue-data/data/resources
-        -Dgeonetwork.data.dir=/catalogue-data/data/metadata_data
-        -Dgeonetwork.codeList.dir=/catalogue-data/config/codelist
-        -Dgeonetwork.backup.dir=/catalogue-data/data/backup
+        -Dgeonetwork.resources.dir=/catalog/data/resources
+        -Dgeonetwork.data.dir=/catalog/data/metadata_data
+        -Dgeonetwork.codeList.dir=/catalog/config/codelist
+        -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
       ES_HOST: elasticsearch
@@ -90,7 +90,7 @@ services:
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
     volumes:
-      - ./geonetwork_data:/catalogue-data
+      - ./volumes/geonetwork_data:/catalog
     depends_on:
       - elasticsearch
       - database
@@ -103,9 +103,9 @@ services:
       GEOSERVER_CSRF_WHITELIST: ${FQDN}
       PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
     volumes:
-      - ./geoserver_datadir:/mnt/geoserver_datadir
-      - ./geoserver_geodata:/mnt/geoserver_geodata
-      - ./geoserver_tiles:/mnt/geoserver_tiles
+      - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
+      - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
+      - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
     restart: unless-stopped
     networks:
       - gn-network
