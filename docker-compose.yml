@@ -71,9 +71,10 @@ services:
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
-        -Dgeonetwork.resources.dir=/catalogue-data/resources
-        -Dgeonetwork.data.dir=/catalogue-data
-        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist
+        -Dgeonetwork.resources.dir=/catalogue-data/data/resources
+        -Dgeonetwork.data.dir=/catalogue-data/data/metadata_data
+        -Dgeonetwork.codeList.dir=/catalogue-data/config/codelist
+        -Dgeonetwork.backup.dir=/catalogue-data/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
       ES_HOST: elasticsearch

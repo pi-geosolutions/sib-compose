@@ -62,9 +62,10 @@ services:
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
-        -Dgeonetwork.resources.dir=/catalogue-data/resources
-        -Dgeonetwork.data.dir=/catalogue-data
-        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist
+        -Dgeonetwork.resources.dir=/catalogue-data/data/resources
+        -Dgeonetwork.data.dir=/catalogue-data/data/metadata_data
+        -Dgeonetwork.codeList.dir=/catalogue-data/config/codelist
+        -Dgeonetwork.backup.dir=/catalogue-data/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
       ES_HOST: elasticsearch
@@ -81,7 +82,7 @@ services:
       GEONETWORK_DB_PASSWORD: geonetwork
       NF_MENU_URL: "http://localhost/NFpage.html"
     volumes:
-      - ./geonetwork_data:/catalogue-data
+      - ./volumes/geonetwork_data:/catalogue-data
     depends_on:
       - elasticsearch
       - database
@@ -94,9 +95,9 @@ services:
       GEOSERVER_CSRF_WHITELIST: ${FQDN}
       PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
     volumes:
-      - ./geoserver_datadir:/mnt/geoserver_datadir
-      - ./geoserver_geodata:/mnt/geoserver_geodata
-      - ./geoserver_tiles:/mnt/geoserver_tiles
+      - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
+      - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
+      - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
     restart: unless-stopped
     networks:
       - gn-network

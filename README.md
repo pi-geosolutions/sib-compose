@@ -1,5 +1,14 @@
 # Geonetwork / GeoServer stack using docker-compose
 
+## First run
+Volumes are mounted from local folders. In order to get proper access rights on those folders, you should, before running the compo for the first time, create the folders with proper ACLs:
+```
+# Create the volumes
+mkdir -p volumes/geonetwork_data volumes/geoserver_datadir volumes/geoserver_geodata volumes/geoserver_tiles
+# SET ACLs
+sudo chown -R 999:999 volumes/geonetwork_data volumes/geoserver_datadir volumes/geoserver_geodata volumes/geoserver_tiles
+```
+
 ## Configure
 
 You shouldn't have much configuration to do. You can set the domain name in the .env file. It is used in different places in the docker-compose compo.

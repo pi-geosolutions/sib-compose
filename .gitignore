@@ -1,5 +1,2 @@
-geoserver_datadir/
-geoserver_geodata/
-geoserver_tiles/
-geonetwork_data/
+volumes/
 certbot/
