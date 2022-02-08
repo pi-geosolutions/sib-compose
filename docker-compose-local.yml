@@ -54,7 +54,7 @@ services:
     restart: always
     environment:
       DATA_DIR: /catalogue-data
-      ENABLE_CAS: "no"
+      ENABLE_CAS: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
 
@@ -64,7 +64,7 @@ services:
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalogue-data/data/resources
         -Dgeonetwork.data.dir=/catalogue-data/data/metadata_data
-        -Dgeonetwork.codeList.dir=/catalogue-data/config/codelist
+        -Dgeonetwork.config.dir=/catalogue-data/config
         -Dgeonetwork.backup.dir=/catalogue-data/data/backup
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
 
