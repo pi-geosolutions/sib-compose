@@ -54,6 +54,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - pglog:/var/log/postgresql
+      - ./volumes/backups/database:/apps/backups/database
     networks:
       - gn-network
 
@@ -101,7 +102,7 @@ services:
       - gn-network
 
   geoserver:
-    image: pigeosolutions/geoserver:2.20.1-sib
+    image: pigeosolutions/geoserver:2.20.2-20220210-1709-ef1ce47
     environment:
       GEOSERVER_CSRF_WHITELIST: ${FQDN}
       PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
