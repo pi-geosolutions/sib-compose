@@ -55,6 +55,7 @@ services:
     environment:
       DATA_DIR: /catalog
       ENABLE_CAS: "no"
+      ENABLE_FLAT_FORM: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
 

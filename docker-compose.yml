@@ -59,11 +59,12 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.0.6-20220209-1616-a578b94
+    image: pigeosolutions/sib-geonetwork:4.0.6-20220210-1236-a578b94
     restart: always
     environment:
       DATA_DIR: /catalog
       ENABLE_CAS: "yes"
+      ENABLE_FLAT_FORM: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
       NF_MENU_URL: "${HTTP_SCHEME}://${FQDN}/NFpage.html"
