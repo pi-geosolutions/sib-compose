@@ -36,7 +36,6 @@ docker-compose up -d
 
 Renewing later the certificate can be done using `docker-compose run --rm certbot renew`
 
-
 ## CAS config
 
 ### GN
@@ -51,3 +50,9 @@ You can define a set of predefined admin users by listing their ids in the ADMIN
 On Geoserver, the CAS configuration is done after deployment, on the web UI. Follow https://docs.geoserver.org/latest/en/user/security/tutorials/cas/index.html and in the filter chains, put it always on the top (or follow the instructions from https://docs.geoserver.org/latest/en/user/extensions/cas/index.html#example-cas-configuration)
 
 There is for now a bug when logout from geoserver: the redirect on the cas side will not work, because GS provides the wrong parameter (`url` instead of `service`). The bug is documented on jira: https://osgeo-org.atlassian.net/browse/GEOS-10342
+
+## Thesauri management and flat form
+The flat form is configured to use *local* thesauri, namely `opendata`, `datatype`, `politiquepublique`, `thematiques`, `dpsir`, `ebv`.
+Having them as local thesauri allows them to be editable through the web UI. But when you download them then import them, they will be stored as external (we don't have the choice). So, if we do nothing, the thesauri selectors in the flat form won't work anymore.
+Consequently, it is necessary to move them to the local folder. You can run the script `thesaurus-make-local.sh` for this. You should check that the DATADIR_PATH var is correct.
+***It looks like it is not enough for GN: apparently it loads the thesauri on startup, so you'll also need to restart GN to get them seen as local thesauri.***
