@@ -69,7 +69,7 @@ services:
       ENABLE_FLAT_FORM: "yes"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
-      NF_MENU_URL: "${HTTP_SCHEME}://${FQDN}/NFpage.html"
+      NF_MENU_URL: "https://naturefrance.fr/les-milieux-humides"
 
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
