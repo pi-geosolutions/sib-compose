@@ -4,9 +4,10 @@
 Volumes are mounted from local folders. In order to get proper access rights on those folders, you should, before running the compo for the first time, create the folders with proper ACLs:
 ```
 # Create the volumes
-mkdir -p volumes/geonetwork_data volumes/geoserver_datadir volumes/geoserver_geodata volumes/geoserver_tiles volumes/backups/database
+VOLUMES_PATH=volumes
+mkdir -p $VOLUMES_PATH/geonetwork_data $VOLUMES_PATH/geoserver_datadir $VOLUMES_PATH/geoserver_geodata $VOLUMES_PATH/geoserver_tiles $VOLUMES_PATH/backups/database
 # SET ACLs
-sudo chown -R 999:999 volumes/geonetwork_data volumes/geoserver_datadir volumes/geoserver_geodata volumes/geoserver_tiles
+sudo chown -R 999:999 $VOLUMES_PATH/geonetwork_data $VOLUMES_PATH/geoserver_datadir $VOLUMES_PATH/geoserver_geodata $VOLUMES_PATH/geoserver_tiles
 ```
 
 ## Configure
