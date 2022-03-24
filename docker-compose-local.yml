@@ -107,6 +107,8 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.9.2
+    ports:
+      - 9200:9200
     ulimits:
       memlock:
         soft: -1
