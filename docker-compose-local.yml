@@ -83,7 +83,7 @@ services:
       GEONETWORK_DB_NAME: geonetwork
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
-      NF_MENU_URL: "http://localhost/NFpage.html"
+      NF_MENU_URL: "http://192.168.1.70/blankPage.html"
     volumes:
       - ./volumes/geonetwork_data:/catalog
     depends_on:
