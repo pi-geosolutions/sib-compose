@@ -40,10 +40,10 @@ services:
       - "traefik.docker.network=traefik-proxy_proxy_network"
       # HTTPS router
       - "traefik.http.routers.www-sib.entrypoints=websecure"
-      - "traefik.http.routers.www-sib.rule=Host(`sib1.pigeosolutions.fr`)"
+      - "traefik.http.routers.www-sib.rule=Host(`sib1.dev.pigeosolutions.fr`)"
       - "traefik.http.routers.www-sib.tls=true"
       - "traefik.http.routers.www-sib.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.www-sib.tls.domains[0].main=sib1.pigeosolutions.fr"
+      - "traefik.http.routers.www-sib.tls.domains[0].main=sib1.dev.pigeosolutions.fr"
 
   database:
     image: postgis/postgis:11-2.5
@@ -66,7 +66,7 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.0.6-20230113-1053-57267b9
+    image: pigeosolutions/sib-geonetwork:4.0.6-20230123-1054-8f591bd
     restart: always
     environment:
       DATA_DIR: /catalog
