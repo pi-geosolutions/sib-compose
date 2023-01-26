@@ -23,13 +23,11 @@ services:
       - NGINX_PUBLIC_HOST=$FQDN
     volumes:
       - ./nginx_local:/etc/nginx/templates
-      - ./nginx_html:/usr/share/nginx/html
       - nginxlog:/var/log/nginx
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - geonetwork
       - geoserver
+      - static
     networks:
       - traefik-proxy_proxy_network
       - default
@@ -44,6 +42,27 @@ services:
       - "traefik.http.routers.www-sib.tls=true"
       - "traefik.http.routers.www-sib.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.www-sib.tls.domains[0].main=sib1.dev.pigeosolutions.fr"
+
+
+  # Serve static files. Bunkerweb is a "secured" nginx, used by MNHN
+  static:
+    image: bunkerity/bunkerweb:1.4.5
+    # ports:
+    #   - 8082:8080
+    environment:
+      - MAX_CLIENT_SIZE=10m
+      - USE_BAD_BEHAVIOR=yes
+      - USE_MODSECURITY=yes
+      - LOG_LEVEL=info
+      - AUTO_LETS_ENCRYPT=no
+      - ROOT_FOLDER=/usr/share/nginx/html
+    volumes:
+      - ./nginx_html:/usr/share/nginx/html
+    networks:
+      - default
+    restart: always
+
+
 
   database:
     image: postgis/postgis:11-2.5
