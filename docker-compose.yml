@@ -128,7 +128,7 @@ services:
       - default
 
   geoserver:
-    image: pigeosolutions/geoserver:2.22.2-20230224-1542-32f9a73
+    image: pigeosolutions/geoserver:2.22.2-20230224-1636-32f9a73
     environment:
       GEOSERVER_CSRF_WHITELIST: ${FQDN}
       PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
