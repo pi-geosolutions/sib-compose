@@ -85,7 +85,7 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.0.6-20230123-1132-9f6e5fc
+    image: pigeosolutions/sib-geonetwork:4.0.6-20230224-1542-e1868c5
     restart: always
     environment:
       DATA_DIR: /catalog
@@ -128,7 +128,7 @@ services:
       - default
 
   geoserver:
-    image: pigeosolutions/geoserver:2.20.2-20220210-1709-ef1ce47
+    image: pigeosolutions/geoserver:2.22.2-20230224-1542-32f9a73
     environment:
       GEOSERVER_CSRF_WHITELIST: ${FQDN}
       PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
