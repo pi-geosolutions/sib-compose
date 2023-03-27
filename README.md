@@ -57,3 +57,18 @@ The flat form is configured to use *local* thesauri, namely `opendata`, `datatyp
 Having them as local thesauri allows them to be editable through the web UI. But when you download them then import them, they will be stored as external (we don't have the choice). So, if we do nothing, the thesauri selectors in the flat form won't work anymore.
 Consequently, it is necessary to move them to the local folder. You can run the script `thesaurus-make-local.sh` for this. You should check that the DATADIR_PATH var is correct.
 ***It looks like it is not enough for GN: apparently it loads the thesauri on startup, so you'll also need to restart GN to get them seen as local thesauri.***
+
+
+## Upgrade to 4.2.3
+A new file has been added in the datadir, but if we already have initialized our datadir, it won't be copied automatically. So you'll have to copy it.
+Run the following command, adapting the DEST_DATADIR value according to your config:
+```
+DEST_DATADIR=./volumes/geonetwork_data
+# Create the destination folder since it probably won't exist, and give it to jetty user
+sudo mkdir -p ${DEST_DATADIR}/data/resources/config/
+sudo chown 999:999 ${DEST_DATADIR}/data/resources/config/
+# Copy the file
+docker-compose cp geonetwork:/var/lib/jetty/webapps/geonetwork/WEB-INF/data/data/resources/config/manual.json ${DEST_DATADIR}/data/resources/config/
+```
+
+You will also have to clear the GeoNetwork javascript cache: log in, go to admin / settings / tools and click "Clear JS& CSS cache".
