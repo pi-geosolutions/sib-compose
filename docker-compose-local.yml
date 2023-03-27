@@ -70,6 +70,7 @@ services:
 
   geonetwork:
     image: pigeosolutions/sib-geonetwork:latest
+    #image: geonetwork:4.2.3
     restart: always
     environment:
       DATA_DIR: /catalog
