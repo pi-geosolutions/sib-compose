@@ -119,11 +119,31 @@ services:
       GEONETWORK_DB_NAME: geonetwork
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
+      GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
     volumes:
       - ./volumes/geonetwork_data:/catalog
     depends_on:
       - elasticsearch
       - database
+    networks:
+      - default
+
+  ogc-api-records-service:
+    image: geonetwork/gn-cloud-ogc-api-records-service:4.2.3-0
+    environment:
+      SPRING_PROFILES_ACTIVE: standalone
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
+      SPRING_DATASOURCE_USERNAME: geonetwork
+      SPRING_DATASOURCE_PASSWORD: geonetwork
+      GN_BASEURL: ${HTTP_SCHEME}://${FQDN}/geonetwork/api
+      GN_LEGACY_URL: ${HTTP_SCHEME}://${FQDN}/geonetwork
+      GN_INDEX_URL: http://elasticsearch:9200
+      SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
+      JAVA_OPTS: -Dfile.encoding=UTF-8
+
+    depends_on:
+      - database
+      - elasticsearch
     networks:
       - default
 
