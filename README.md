@@ -53,13 +53,13 @@ On Geoserver, the CAS configuration is done after deployment, on the web UI. Fol
 There is for now a bug when logout from geoserver: the redirect on the cas side will not work, because GS provides the wrong parameter (`url` instead of `service`). The bug is documented on jira: https://osgeo-org.atlassian.net/browse/GEOS-10342
 
 ## Thesauri management and flat form
-The flat form is configured to use *local* thesauri, namely `opendata`, `datatype`, `politiquepublique`, `thematiques`, `dpsir`, `ebv`.
-Having them as local thesauri allows them to be editable through the web UI. But when you download them then import them, they will be stored as external (we don't have the choice). So, if we do nothing, the thesauri selectors in the flat form won't work anymore.
-Consequently, it is necessary to move them to the local folder. You can run the script `thesaurus-make-local.sh` for this. You should check that the DATADIR_PATH var is correct.
-***It looks like it is not enough for GN: apparently it loads the thesauri on startup, so you'll also need to restart GN to get them seen as local thesauri.***
+The flat form is configured to use *local* thesauri, namely for `opendata`, `datatype`, `politiquepublique`, `thematiques`, `dpsir`, `ebv`.
+Having them as local thesauri allows them to be editable through the web UI. But when you import them into another catalog (for instance between test and prod), by default they are imported as *external* thesauri. There is now an option when importing a thesaurus to make it stored as a *local* one. ***Do select that option, if they are not imported as local thesauri, they will not be accessible from the flat form.***
 
 
-## Upgrade to 4.2.3
+## Upgrading GN
+### Upgrade to 4.2.3
+
 A new file has been added in the datadir, but if we already have initialized our datadir, it won't be copied automatically. So you'll have to copy it.
 Run the following command, adapting the DEST_DATADIR value according to your config:
 ```
@@ -71,4 +71,20 @@ sudo chown 999:999 ${DEST_DATADIR}/data/resources/config/
 docker-compose cp geonetwork:/var/lib/jetty/webapps/geonetwork/WEB-INF/data/data/resources/config/manual.json ${DEST_DATADIR}/data/resources/config/
 ```
 
-You will also have to clear the GeoNetwork javascript cache: log in, go to admin / settings / tools and click "Clear JS& CSS cache".
+You will also have to clear the GeoNetwork javascript cache: log in, go to admin / settings / tools and click "Clear JS & CSS cache".
+
+### Upgrade to 4.2.4
+There have been some changes in the way the search is configured. This is configured in the UI section (web UI -> Settings -> UI configuration).
+
+To be sure to alter the less possible the default config, it is now possible to only override those sections that we need. We can indeed replace the whole json config by those few lines (CAS config)
+```
+{
+  "mods": {
+    "authentication": {
+      "signinUrl": "../../{{node}}/{{lang}}/catalog.signin?casLogin"
+    }
+  }
+}
+```
+
+You will also have to clear the GeoNetwork javascript cache: log in, go to admin / settings / tools and click "Clear JS & CSS cache".
