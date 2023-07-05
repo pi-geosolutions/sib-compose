@@ -31,7 +31,8 @@ services:
     restart: always
 
   static:
-    image: bunkerity/bunkerweb:1.4.5
+    # image: bunkerity/bunkerweb:1.4.5
+    image: nginx
     # ports:
     #   - 8082:8080
     environment:
