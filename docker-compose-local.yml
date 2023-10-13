@@ -24,7 +24,7 @@ services:
       - nginxlog:/var/log/nginx
     depends_on:
       - geonetwork
-      - geoserver
+      # - geoserver
       - static
     networks:
       - gn-network
@@ -112,18 +112,18 @@ services:
     networks:
       - gn-network
 
-  geoserver:
-    image: pigeosolutions/geoserver:latest
-    environment:
-      GEOSERVER_CSRF_WHITELIST: ${FQDN}
-#      PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
-    volumes:
-      - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
-      - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
-      - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
-    restart: unless-stopped
-    networks:
-      - gn-network
+#   geoserver:
+#     image: pigeosolutions/geoserver:latest
+#     environment:
+#       GEOSERVER_CSRF_WHITELIST: ${FQDN}
+# #      PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
+#     volumes:
+#       - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
+#       - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
+#       - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
+#     restart: unless-stopped
+#     networks:
+#       - gn-network
 
   elasticsearch:
     image: elasticsearch:7.9.2

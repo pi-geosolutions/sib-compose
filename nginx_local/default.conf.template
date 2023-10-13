@@ -29,33 +29,33 @@ server {
       proxy_redirect off;
       proxy_pass http://static:80/static;
     }
-    location /geoserver {
-      proxy_set_header Host $http_host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto https;
-      proxy_redirect off;
-      proxy_pass http://geoserver:8080/geoserver;
-
-
-      # CORS, see https://distinctplace.com/2017/04/17/nginx-access-control-allow-origin-cors/
-      # Simple requests
-      if ($request_method ~* "(GET|POST|HEAD)") {
-        add_header "Access-Control-Allow-Origin"  *;
-      }
-
-      # Preflighted requests
-      if ($request_method = OPTIONS ) {
-
-        # Tell client that this pre-flight info is valid for 20 minutes
-        #
-        add_header 'Access-Control-Max-Age' 1200;
-        add_header "Access-Control-Allow-Origin"  *;
-        add_header "Access-Control-Allow-Methods" "GET, POST, OPTIONS, HEAD";
-        add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
-        return 200;
-      }
-    }
+#    location /geoserver {
+#      proxy_set_header Host $http_host;
+#      proxy_set_header X-Real-IP $remote_addr;
+#      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#      proxy_set_header X-Forwarded-Proto https;
+#      proxy_redirect off;
+#      proxy_pass http://geoserver:8080/geoserver;
+#
+#
+#      # CORS, see https://distinctplace.com/2017/04/17/nginx-access-control-allow-origin-cors/
+#      # Simple requests
+#      if ($request_method ~* "(GET|POST|HEAD)") {
+#        add_header "Access-Control-Allow-Origin"  *;
+#      }
+#
+#      # Preflighted requests
+#      if ($request_method = OPTIONS ) {
+#
+#        # Tell client that this pre-flight info is valid for 20 minutes
+#        #
+#        add_header 'Access-Control-Max-Age' 1200;
+#        add_header "Access-Control-Allow-Origin"  *;
+#        add_header "Access-Control-Allow-Methods" "GET, POST, OPTIONS, HEAD";
+#        add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
+#        return 200;
+#      }
+#    }
 }
 
 server {
