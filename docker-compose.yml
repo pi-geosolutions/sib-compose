@@ -92,7 +92,7 @@ services:
       ENABLE_CAS: "yes"
       CAS_BASE_URL: https://test-cas-patrinat.mnhn.fr/auth
       ENABLE_FLAT_FORM: "yes"
-      ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
+      ADMIN_USERS: "jean.pommier@pi-geosolutions.fr guillaume.grech@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
       NF_MENU_URL: "https://naturefrance.fr/les-milieux-humides"
 
