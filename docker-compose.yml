@@ -85,7 +85,7 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.2.4-20231206-1135-11856d1
+    image: pigeosolutions/sib-geonetwork:4.2.4-20231208-1015-0e0e857
     restart: always
     environment:
       DATA_DIR: /catalog
@@ -129,7 +129,7 @@ services:
       - default
 
   ogc-api-records-service:
-    image: geonetwork/gn-cloud-ogc-api-records-service:4.2.3-0
+    image: geonetwork/gn-cloud-ogc-api-records-service:4.2.4-0
     environment:
       SPRING_PROFILES_ACTIVE: standalone
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
@@ -161,7 +161,7 @@ services:
       - default
 
   elasticsearch:
-    image: elasticsearch:7.9.2
+    image: elasticsearch:7.11.1
     ulimits:
       memlock:
         soft: -1
@@ -178,7 +178,7 @@ services:
       - default
 
   kibana:
-    image: kibana:7.9.2
+    image: kibana:7.11.1
     environment:
       SERVER_NAME: 'kibana'
       ELASTICSEARCH_URL: http://elasticsearch:9200/
