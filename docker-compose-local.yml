@@ -71,15 +71,16 @@ services:
 
   geonetwork:
     image: pigeosolutions/sib-geonetwork:latest
+    # image: pigeosolutions/sib-geonetwork:4.2.4-20231208-1147-ee8a555
     #image: geonetwork:4.2.3
     restart: always
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     environment:
       DATA_DIR: /catalog
       ENABLE_CAS: "no"
       ENABLE_FLAT_FORM: "yes"
-      ADMIN_USERS: "jean.pommier@pi-geosolutions.fr thomas.milon@mnhn.fr"
+      ADMIN_USERS: "jean.pommier@pi-geosolutions.fr"
       GEONETWORK_URL: "http://localhost/geonetwork"
 
       # JAVA_OPTS: >
@@ -103,6 +104,7 @@ services:
         -Dgeonetwork.codeList.dir=/catalog/config/codelist
         -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.schema.dir=/catalog/config/schema_plugins
+        -Dgeonetwork.security.coreconfig=encodeduuid
 
       ES_HOST: elasticsearch
       ES_PROTOCOL: http
