@@ -70,7 +70,7 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:latest
+    image: pigeosolutions/sib-geonetwork:4.2.4-20241022-1542-6e6b5b4
     # image: pigeosolutions/sib-geonetwork:4.2.4-20231208-1147-ee8a555
     #image: geonetwork:4.2.3
     restart: always
