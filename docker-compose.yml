@@ -37,11 +37,11 @@ services:
       # Tell traefik which network to look on, since this container is connected to 2 different nets
       - "traefik.docker.network=traefik-proxy_proxy_network"
       # HTTPS router
-      - "traefik.http.routers.www-sib.entrypoints=websecure"
-      - "traefik.http.routers.www-sib.rule=Host(`$FQDN`)"
-      - "traefik.http.routers.www-sib.tls=true"
-      - "traefik.http.routers.www-sib.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.www-sib.tls.domains[0].main=$FQDN"
+      - "traefik.http.routers.www-mnhn.entrypoints=websecure"
+      - "traefik.http.routers.www-mnhn.rule=Host(`$FQDN`)"
+      - "traefik.http.routers.www-mnhn.tls=true"
+      - "traefik.http.routers.www-mnhn.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.www-mnhn.tls.domains[0].main=$FQDN"
 
 
   # Serve static files. Bunkerweb is a "secured" nginx, used by MNHN
