@@ -26,7 +26,7 @@ services:
       - nginxlog:/var/log/nginx
     depends_on:
       - geonetwork
-      - geoserver
+      # - geoserver
       - static
     networks:
       - traefik-proxy_proxy_network
@@ -38,10 +38,10 @@ services:
       - "traefik.docker.network=traefik-proxy_proxy_network"
       # HTTPS router
       - "traefik.http.routers.www-sib.entrypoints=websecure"
-      - "traefik.http.routers.www-sib.rule=Host(`sib1.dev.pigeosolutions.fr`)"
+      - "traefik.http.routers.www-sib.rule=Host(`$FQDN`)"
       - "traefik.http.routers.www-sib.tls=true"
       - "traefik.http.routers.www-sib.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.www-sib.tls.domains[0].main=sib1.dev.pigeosolutions.fr"
+      - "traefik.http.routers.www-sib.tls.domains[0].main=$FQDN"
 
 
   # Serve static files. Bunkerweb is a "secured" nginx, used by MNHN
@@ -85,16 +85,17 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.2.4-20241202-1214-3897d15
+    image: pigeosolutions/sib-geonetwork:4.2.4-20250304-1813-848099f
     restart: always
     environment:
+      WEBAPP_CONTEXT_PATH: /catalogue
       DATA_DIR: /catalog
-      ENABLE_CAS: "yes"
-      CAS_BASE_URL: https://test-cas-patrinat.mnhn.fr/auth
-      ENABLE_FLAT_FORM: "yes"
-      ADMIN_USERS: "jean.pommier@pi-geosolutions.fr guillaume.grech@mnhn.fr"
-      GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/geonetwork"
-      NF_MENU_URL: "https://naturefrance.fr/les-milieux-humides"
+      ENABLE_CAS: "no"
+      # CAS_BASE_URL: https://test-cas-patrinat.mnhn.fr/auth
+      ENABLE_FLAT_FORM: "no"
+      # ADMIN_USERS: "jean.pommier@pi-geosolutions.fr guillaume.grech@mnhn.fr"
+      GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/catalogue"
+      # NF_MENU_URL: "https://naturefrance.fr/les-milieux-humides"
 
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
@@ -102,10 +103,10 @@ services:
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalog/data/resources
         -Dgeonetwork.data.dir=/catalog/data/metadata_data
+        -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.config.dir=/catalog/config
         -Dgeonetwork.codeList.dir=/catalog/config/codelist
-        -Dgeonetwork.backup.dir=/catalog/data/backup
-        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
+        -Dgeonetwork.schema.dir=/opt/geonetwork/WEB-INF/data/config/schema_plugins/schema_plugins
         -Dgeonetwork.security.coreconfig=encodeduuid
 
       ES_HOST: elasticsearch
@@ -136,8 +137,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
       SPRING_DATASOURCE_USERNAME: geonetwork
       SPRING_DATASOURCE_PASSWORD: geonetwork
-      GN_BASEURL: ${HTTP_SCHEME}://${FQDN}/geonetwork/api
-      GN_LEGACY_URL: ${HTTP_SCHEME}://${FQDN}/geonetwork
+      GN_BASEURL: ${HTTP_SCHEME}://${FQDN}/catalogue/api
+      GN_LEGACY_URL: ${HTTP_SCHEME}://${FQDN}/catalogue
       GN_INDEX_URL: http://elasticsearch:9200
       SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
       JAVA_OPTS: -Dfile.encoding=UTF-8
@@ -148,18 +149,18 @@ services:
     networks:
       - default
 
-  geoserver:
-    image: pigeosolutions/geoserver:2.22.2-20230224-1636-32f9a73
-    environment:
-      GEOSERVER_CSRF_WHITELIST: ${FQDN}
-      PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
-    volumes:
-      - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
-      - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
-      - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
-    restart: unless-stopped
-    networks:
-      - default
+  # geoserver:
+  #   image: pigeosolutions/geoserver:2.22.2-20230224-1636-32f9a73
+  #   environment:
+  #     GEOSERVER_CSRF_WHITELIST: ${FQDN}
+  #     PROXY_BASE_URL: ${HTTP_SCHEME}://${FQDN}/geoserver
+  #   volumes:
+  #     - ./volumes/geoserver_datadir:/mnt/geoserver_datadir
+  #     - ./volumes/geoserver_geodata:/mnt/geoserver_geodata
+  #     - ./volumes/geoserver_tiles:/mnt/geoserver_tiles
+  #   restart: unless-stopped
+  #   networks:
+  #     - default
 
   elasticsearch:
     image: elasticsearch:7.11.1
@@ -183,7 +184,7 @@ services:
     environment:
       SERVER_NAME: 'kibana'
       ELASTICSEARCH_URL: http://elasticsearch:9200/
-      SERVER_BASEPATH: /geonetwork/dashboards
+      SERVER_BASEPATH: /catalogue/dashboards
       SERVER_REWRITEBASEPATH: 'false'
       KIBANA_INDEX: .dashboards
       XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: 'true'

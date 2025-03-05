@@ -93,6 +93,7 @@ services:
         -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.config.dir=/catalog/config
         -Dgeonetwork.schema.dir=/opt/geonetwork/WEB-INF/data/config/schema_plugins/
+        -Dgeonetwork.security.coreconfig=encodeduuid
 
       ES_HOST: elasticsearch
       ES_PROTOCOL: http

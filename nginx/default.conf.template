@@ -25,6 +25,10 @@ server {
     ssl_certificate /etc/nginx/ssl/live/${NGINX_PUBLIC_HOST}/fullchain.pem;
     ssl_certificate_key /etc/nginx/ssl/live/${NGINX_PUBLIC_HOST}/privkey.pem;
 
+    # Adjusting the timeout value. Prevents a gateway timeout during reindexing of catalog
+    proxy_read_timeout 600s;
+    proxy_connect_timeout 600s;
+
     location / {
       root /usr/share/nginx/html;
       include       /etc/nginx/mime.types;
