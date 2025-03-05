@@ -70,29 +70,19 @@ services:
 
 
   geonetwork:
-    image: pigeosolutions/sib-geonetwork:4.2.4-20241202-1214-3897d15
-    # image: pigeosolutions/sib-geonetwork:4.2.4-20231208-1147-ee8a555
+    image: pigeosolutions/sib-geonetwork:4.2.4-20250304-1813-848099f
     #image: geonetwork:4.2.3
     restart: always
     # ports:
     #   - 8080:8080
     environment:
+      WEBAPP_CONTEXT_PATH: /catalogue
       DATA_DIR: /catalog
       ENABLE_CAS: "no"
-      ENABLE_FLAT_FORM: "yes"
+      ENABLE_FLAT_FORM: "no"
+      SIB_CUSTOM_STYLE: "no"
       ADMIN_USERS: "jean.pommier@pi-geosolutions.fr"
-      GEONETWORK_URL: "http://localhost/geonetwork"
-
-      # JAVA_OPTS: >
-      #   -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
-      #   -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
-      #   -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
-      #   -Dgeonetwork.resources.dir=/catalog/data/resources
-      #   -Dgeonetwork.data.dir=/catalog/data/metadata_data
-      #   -Dgeonetwork.config.dir=/catalog/config
-      #   -Dgeonetwork.codeList.dir=/catalog/config/codelist
-      #   -Dgeonetwork.backup.dir=/catalog/data/backup
-      #   -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
+      GEONETWORK_URL: "http://localhost/catalogue"
 
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
@@ -100,11 +90,9 @@ services:
         -Xms512M -Xss512M -Xmx1G -XX:+UseConcMarkSweepGC
         -Dgeonetwork.resources.dir=/catalog/data/resources
         -Dgeonetwork.data.dir=/catalog/data/metadata_data
-        -Dgeonetwork.config.dir=/catalog/config
-        -Dgeonetwork.codeList.dir=/catalog/config/codelist
         -Dgeonetwork.backup.dir=/catalog/data/backup
-        -Dgeonetwork.schema.dir=/catalog/config/schema_plugins
-        -Dgeonetwork.security.coreconfig=encodeduuid
+        -Dgeonetwork.config.dir=/catalog/config
+        -Dgeonetwork.schema.dir=/opt/geonetwork/WEB-INF/data/config/schema_plugins/
 
       ES_HOST: elasticsearch
       ES_PROTOCOL: http
@@ -118,7 +106,7 @@ services:
       GEONETWORK_DB_NAME: geonetwork
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
-      NF_MENU_URL: "http://192.168.1.70/static/blankPage.html"
+      # NF_MENU_URL: "http://192.168.1.70/static/blankPage.html"
       GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
     volumes:
       - ./volumes/geonetwork_data:/catalog
@@ -135,8 +123,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
       SPRING_DATASOURCE_USERNAME: geonetwork
       SPRING_DATASOURCE_PASSWORD: geonetwork
-      GN_BASEURL: http://geonetwork:8080/geonetwork/api
-      GN_LEGACY_URL: http://geonetwork:8080/geonetwork
+      GN_BASEURL: http://geonetwork:8080/catalogue/api
+      GN_LEGACY_URL: http://geonetwork:8080/catalogue
       GN_INDEX_URL: http://elasticsearch:9200
       SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
       JAVA_OPTS: -Dfile.encoding=UTF-8
@@ -184,7 +172,7 @@ services:
     environment:
       SERVER_NAME: 'kibana'
       ELASTICSEARCH_URL: http://elasticsearch:9200/
-      SERVER_BASEPATH: /geonetwork/dashboards
+      SERVER_BASEPATH: /catalogue/dashboards
       SERVER_REWRITEBASEPATH: 'false'
       KIBANA_INDEX: .dashboards
       XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: 'true'

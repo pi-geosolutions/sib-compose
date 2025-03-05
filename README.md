@@ -88,3 +88,5 @@ To be sure to alter the less possible the default config, it is now possible to 
 ```
 
 You will also have to clear the GeoNetwork javascript cache: log in, go to admin / settings / tools and click "Clear JS & CSS cache".
+
+

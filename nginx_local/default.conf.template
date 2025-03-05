@@ -9,18 +9,22 @@ server {
     access_log /var/log/nginx/gn-access.log;
     error_log /var/log/nginx/gn-error.log;
 
+    # Adjusting the timeout value. Prevents a gateway timeout during reindexing of catalog
+    proxy_read_timeout 600s;
+    proxy_connect_timeout 600s;
+
     location / {
       root /usr/share/nginx/html;
       include       /etc/nginx/mime.types;
       add_header "Access-Control-Allow-Origin"  *;
     }
 
-    location /geonetwork {
+    location /catalogue {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $http_host;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_redirect off;
-      proxy_pass http://geonetwork:8080/geonetwork;
+      proxy_pass http://geonetwork:8080/catalogue;
     }
     location /static {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
