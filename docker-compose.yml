@@ -90,9 +90,10 @@ services:
     environment:
       WEBAPP_CONTEXT_PATH: /catalogue
       DATA_DIR: /catalog
-      ENABLE_CAS: "no"
-      # CAS_BASE_URL: https://test-cas-patrinat.mnhn.fr/auth
+      ENABLE_CAS: "yes"
+      CAS_BASE_URL: https://test-cas-patrinat.mnhn.fr/auth
       ENABLE_FLAT_FORM: "no"
+      SIB_CUSTOM_STYLE: "no"
       # ADMIN_USERS: "jean.pommier@pi-geosolutions.fr guillaume.grech@mnhn.fr"
       GEONETWORK_URL: "${HTTP_SCHEME}://${FQDN}/catalogue"
       # NF_MENU_URL: "https://naturefrance.fr/les-milieux-humides"
