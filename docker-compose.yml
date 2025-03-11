@@ -105,6 +105,7 @@ services:
         -Dgeonetwork.data.dir=/catalog/data/metadata_data
         -Dgeonetwork.backup.dir=/catalog/data/backup
         -Dgeonetwork.config.dir=/catalog/config
+        -Dgeonetwork.codeList.dir=/catalog/config/codelist
         -Dgeonetwork.schema.dir=/opt/geonetwork/WEB-INF/data/config/schema_plugins
         -Dgeonetwork.security.coreconfig=encodeduuid
 
